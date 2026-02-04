@@ -200,14 +200,13 @@ footer {
   0% { margin-left: 0; }
   50% { margin-left: 20px; }
   100% { margin-left: 0; }
-
 }
 /* 🔧 MOBILE SPACING FIXES */
 @media (max-width: 768px) {
-
-  html, body {
-    overflow-x: hidden; /* Prevent side gaps */
+  html {
+    scroll-snap-type: none !important;
   }
+}
 
   /* Make sections tighter */
   .memory {
@@ -252,12 +251,35 @@ footer {
     padding: 10px 18px;
     font-size: 16px;
   }
-}
 
 /* Optional: Slight text size adjustment for very small phones */
 @media (max-width: 480px) {
   .memory p {
     font-size: 14px;
     line-height: 1.4;
+  }
+}
+/* 🚑 HARD MOBILE OVERRIDE — FIX LARGE GAPS */
+@media (max-width: 768px) {
+
+  .memory {
+    height: auto !important;
+    min-height: unset !important;
+    margin: 12px 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .memory img {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 0 8px 0 !important;
+    display: block;
+  }
+
+  .memory p {
+    margin: 0 0 14px 0 !important;
+    padding: 0 12px;
+    line-height: 1.5;
   }
 }
