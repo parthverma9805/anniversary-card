@@ -200,4 +200,29 @@ footer {
   0% { margin-left: 0; }
   50% { margin-left: 20px; }
   100% { margin-left: 0; }
+
 }
+/* 📱 MOBILE FIX: Reduce large gaps */
+@media (max-width: 768px) {
+  section {
+    min-height: auto !important;
+  }
+}
+  .memory {
+    margin: 20px auto !important;
+    padding: 16px !important;
+    min-height: 100vh;
+  }
+
+  .memory img {
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 12px !important;
+    border-radius: 16px;
+  }
+
+  .memory p {
+    margin-top: 8px !important;
+    line-height: 1.6;
+  }
+
