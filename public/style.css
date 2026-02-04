@@ -259,19 +259,16 @@ footer {
     line-height: 1.4;
   }
 }
-/* 🚑 MOBILE FIX — prevent hidden content due to transform */
+/* 🚑 HARD MOBILE OVERRIDE — FIX LARGE GAPS */
 @media (max-width: 768px) {
 
   .memory {
-    transform: none !important;
-    opacity: 1 !important;
-    margin-bottom: 24px;
+    height: auto !important;
+    min-height: unset !important;
+    margin: 12px 0 !important;
+    padding: 0 !important;
+    display: block !important;
   }
-
-  .memory.show {
-    transform: none !important;
-  }
-}
 
   .memory img {
     width: 100% !important;
@@ -286,5 +283,3 @@ footer {
     line-height: 1.5;
   }
 }
-
-
