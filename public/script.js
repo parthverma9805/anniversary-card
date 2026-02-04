@@ -1,3 +1,7 @@
+// 🔒 Force page to start clean on reload (mobile safe)
+window.scrollTo(0, 0);
+document.body.style.overflowX = "hidden";
+
 document.addEventListener("DOMContentLoaded", () => {
   // 🔁 RESET ON RELOAD
   sessionStorage.clear();
