@@ -202,27 +202,62 @@ footer {
   100% { margin-left: 0; }
 
 }
-/* 📱 MOBILE FIX: Reduce large gaps */
+/* 🔧 MOBILE SPACING FIXES */
 @media (max-width: 768px) {
-  section {
-    min-height: auto !important;
-  }
-}
-  .memory {
-    margin: 20px auto !important;
-    padding: 16px !important;
-    min-height: 100vh;
+
+  html, body {
+    overflow-x: hidden; /* Prevent side gaps */
   }
 
+  /* Make sections tighter */
+  .memory {
+    margin: 8px 0 !important;
+    padding: 0 12px !important;
+    min-height: auto !important;
+  }
+
+  /* Images take full width */
   .memory img {
     width: 100% !important;
     height: auto !important;
-    margin-bottom: 12px !important;
-    border-radius: 16px;
+    margin: 0 auto 10px auto !important;
+    display: block;
+    border-radius: 12px;
   }
 
+  /* Text spacing smaller */
   .memory p {
-    margin-top: 8px !important;
-    line-height: 1.6;
+    margin-top: 4px !important;
+    margin-bottom: 12px !important;
+    font-size: 15px;
+    line-height: 1.45;
   }
 
+  /* Intro spacing smaller */
+  .intro {
+    padding: 20px 12px;
+  }
+
+  .intro h1 {
+    font-size: 25px;
+    margin-bottom: 10px;
+  }
+
+  .intro h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  #startBtn {
+    padding: 10px 18px;
+    font-size: 16px;
+  }
+}
+
+/* Optional: Slight text size adjustment for very small phones */
+@media (max-width: 480px) {
+  .memory p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
