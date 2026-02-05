@@ -98,3 +98,112 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setInterval(createFloatItem, 700);
 });
+let index = 0;
+let isAnimating = false;
+
+const slides = document.querySelector(".slides");
+const slideCount = document.querySelectorAll(".memory").length;
+
+const nextBtn = document.getElementById("next");
+const prevBtn = document.getElementById("prev");
+
+function slideNext(i) {
+  isAnimating = true;
+  gsap.to(slides, {
+    x: -i * window.innerWidth,
+    duration: 1,
+    ease: "power3.inOut",
+    onComplete: () => (isAnimating = false)
+  });
+}
+
+function slidePrev(i) {
+  isAnimating = true;
+  gsap.fromTo(
+    slides,
+    { x: -(i + 1) * window.innerWidth },
+    {
+      x: -i * window.innerWidth,
+      duration: 1,
+      ease: "power3.inOut",
+      onComplete: () => (isAnimating = false)
+    }
+  );
+}
+
+
+
+// ▶ NEXT
+nextBtn.addEventListener("click", () => {
+  if (isAnimating) return;
+
+  // 🧠 Check BEFORE change
+  const isLastSlide = index === slideCount - 1;
+
+  if (isLastSlide) {
+    // 🔁 Last → First (CLOCKWISE)
+    index = 0;
+    slideNext(index);   // ✅ important
+  } else {
+    index++;
+    slideNext(index);
+  }
+
+  updateButtons();
+});
+
+
+// ◀ PREV
+prevBtn.addEventListener("click", () => {
+  if (isAnimating) return;
+
+  index--;
+  if (index < 0) index = slideCount - 1;
+
+  slidePrev(index);
+  updateButtons();
+});
+
+// 🛠 FIX resize bug
+window.addEventListener("resize", () => {
+  slideTo(index);
+});
+const controls = document.querySelector(".controls");
+
+function updateButtons() {
+  if (index === 0) {
+    // First slide
+    prevBtn.classList.add("hidden-btn");
+    controls.classList.remove("dual-btn");
+    nextBtn.classList.add("center-btn");
+  } else {
+    // Other slides
+    prevBtn.classList.remove("hidden-btn");
+    controls.classList.add("dual-btn");
+    nextBtn.classList.remove("center-btn");
+  }
+}
+// Initial
+updateButtons();
+
+// NEXT
+nextBtn.addEventListener("click", () => {
+  if (isAnimating) return;
+
+  index++;
+  if (index >= slideCount) index = 0;
+
+  slideTo(index);
+  updateButtons();
+});
+
+// PREV
+prevBtn.addEventListener("click", () => {
+  if (isAnimating) return;
+
+  index--;
+  if (index < 0) index = slideCount - 1;
+
+  slideTo(index);
+  updateButtons();
+});
