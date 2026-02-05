@@ -1,209 +1,176 @@
-// 🔒 Force page to start clean on reload (mobile safe)
-window.scrollTo(0, 0);
-document.body.style.overflowX = "hidden";
-
 document.addEventListener("DOMContentLoaded", () => {
-  // 🔁 RESET ON RELOAD
-  sessionStorage.clear();
-  history.scrollRestoration = "manual";
-  window.scrollTo(0, 0);
 
-  const startBtn = document.getElementById("startBtn");
   const intro = document.querySelector(".intro");
-  const memories = document.querySelectorAll(".memory");
+  const startBtn = document.getElementById("startBtn");
 
-  // ✅ INTRO VISIBLE ON LOAD
-  intro.style.display = "flex";
-  document.body.style.overflow = "hidden";
+  const slides = document.querySelector(".slides");
+  const slideCount = document.querySelectorAll(".memory").length;
 
-  // ❌ Hide memories initially
-  memories.forEach(m => m.classList.remove("show"));
+  const nextBtn = document.getElementById("next");
+  const prevBtn = document.getElementById("prev");
+  const controls = document.querySelector(".controls");
 
-  // 🌟 GSAP intro animation
+  const bg = document.getElementById("bg-animation");
+  const emojis = ["🌸", "🌺", "🌼", "🌹", "❤️", "💖", "💞", "✨"];
+
+  let index = 0;
+  let isAnimating = false;
+
+  /* 🌟 INTRO ANIMATION */
   gsap.from(".intro h1", { y: 40, opacity: 0, duration: 1 });
   gsap.from(".intro h2", { y: 30, opacity: 0, delay: 0.3, duration: 1 });
   gsap.from("#startBtn", {
-    scale: 0.7,
+    scale: 0.6,
     opacity: 0,
-    delay: 0.7,
+    delay: 0.6,
     duration: 0.8,
     ease: "back.out(1.7)"
   });
 
-  // ▶️ START JOURNEY
   startBtn.addEventListener("click", () => {
-    // GSAP exit intro
-    gsap.to(".intro", {
+    gsap.to(intro, {
       opacity: 0,
       duration: 0.6,
-      onComplete: () => {
-        intro.style.display = "none";
-        document.body.style.overflow = "auto";
-        window.scrollTo(0, 0);
-
-        // Show first memory
-        if (memories[0]) {
-          memories[0].classList.add("show");
-
-          gsap.from(memories[0].querySelector(".card"), {
-            y: 60,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out"
-          });
-        }
-      }
+      onComplete: () => intro.style.display = "none"
     });
   });
 
-  // 👇 Scroll reveal with GSAP
-  window.addEventListener("scroll", () => {
-    if (intro.style.display !== "none") return;
-
-    memories.forEach(section => {
-      if (section.classList.contains("animated")) return;
-
-      const rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 120) {
-        section.classList.add("show", "animated");
-
-        gsap.from(section.querySelector(".card"), {
-          y: 80,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out"
-        });
-      }
-    });
-  });
-
-  // 🌸❤️ BACKGROUND FLOWERS & HEARTS
-  const bg = document.getElementById("bg-animation");
-  const items = ["🌸", "🌺", "🌼", "🌹", "❤️", "💖", "💗"];
-
-  function createFloatItem() {
-    if (!bg) return;
-
+  /* 🌸 FLOATING EMOJIES */
+  function createFloat() {
     const el = document.createElement("div");
-    el.className = "float-item";
-    el.innerHTML = items[Math.floor(Math.random() * items.length)];
+    el.className = "float";
+    el.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
 
     el.style.left = Math.random() * 100 + "vw";
     el.style.fontSize = 18 + Math.random() * 28 + "px";
-    el.style.animationDuration = 7 + Math.random() * 8 + "s";
+    el.style.animationDuration = 8 + Math.random() * 8 + "s";
 
     bg.appendChild(el);
     setTimeout(() => el.remove(), 16000);
   }
 
-  setInterval(createFloatItem, 700);
-});
-let index = 0;
-let isAnimating = false;
+  setInterval(createFloat, 700);
 
-const slides = document.querySelector(".slides");
-const slideCount = document.querySelectorAll(".memory").length;
+  /* BUTTON STATE */
+  function updateButtons() {
+    if (index === 0) {
+      controls.classList.add("single");
+      controls.classList.remove("dual");
+    } else {
+      controls.classList.remove("single");
+      controls.classList.add("dual");
+    }
+  }
 
-const nextBtn = document.getElementById("next");
-const prevBtn = document.getElementById("prev");
-
-function slideNext(i) {
-  isAnimating = true;
-  gsap.to(slides, {
-    x: -i * window.innerWidth,
-    duration: 1,
-    ease: "power3.inOut",
-    onComplete: () => (isAnimating = false)
-  });
-}
-
-function slidePrev(i) {
-  isAnimating = true;
-  gsap.fromTo(
-    slides,
-    { x: -(i + 1) * window.innerWidth },
-    {
+  /* SLIDE ANIMATIONS */
+  function slideNext(i) {
+    isAnimating = true;
+    gsap.to(slides, {
       x: -i * window.innerWidth,
       duration: 1,
       ease: "power3.inOut",
-      onComplete: () => (isAnimating = false)
+      onComplete: () => isAnimating = false
+    });
+  }
+
+  function slidePrev(i) {
+    isAnimating = true;
+    gsap.fromTo(
+      slides,
+      { x: -(i + 1) * window.innerWidth },
+      {
+        x: -i * window.innerWidth,
+        duration: 1,
+        ease: "power3.inOut",
+        onComplete: () => isAnimating = false
+      }
+    );
+  }
+
+  function slideLoopNext() {
+    isAnimating = true;
+    gsap.set(slides, { x: window.innerWidth });
+    gsap.to(slides, {
+      x: 0,
+      duration: 1,
+      ease: "power3.inOut",
+      onComplete: () => isAnimating = false
+    });
+  }
+
+  /* NEXT */
+  nextBtn.addEventListener("click", () => {
+    if (isAnimating) return;
+
+    if (index === slideCount - 1) {
+      index = 0;
+      slideLoopNext();
+    } else {
+      index++;
+      slideNext(index);
     }
-  );
-}
+    updateButtons();
+  });
 
+  /* PREV */
+  prevBtn.addEventListener("click", () => {
+    if (isAnimating) return;
 
-
-// ▶ NEXT
-nextBtn.addEventListener("click", () => {
-  if (isAnimating) return;
-
-  // 🧠 Check BEFORE change
-  const isLastSlide = index === slideCount - 1;
-
-  if (isLastSlide) {
-    // 🔁 Last → First (CLOCKWISE)
-    index = 0;
-    slideNext(index);   // ✅ important
-  } else {
-    index++;
-    slideNext(index);
-  }
+    if (index === 0) {
+      index = slideCount - 1;
+      slidePrev(index);
+    } else {
+      index--;
+      slidePrev(index);
+    }
+    updateButtons();
+  });
 
   updateButtons();
+
+  window.addEventListener("resize", () => {
+    gsap.set(slides, { x: -index * window.innerWidth });
+  });
+});
+// START BUTTON PREMIUM ANIMATION
+gsap.timeline({ repeat: -1, yoyo: true })
+  .to("#startBtn", {
+    scale: 1.08,
+    boxShadow: "0 0 25px rgba(179,0,89,0.6)",
+    duration: 1.2,
+    ease: "power1.inOut"
+  });
+  startBtn.addEventListener("mouseenter", () => {
+  gsap.to(startBtn, {
+    scale: 1.15,
+    duration: 0.4,
+    ease: "back.out(1.7)"
+  });
 });
 
+startBtn.addEventListener("mouseleave", () => {
+  gsap.to(startBtn, {
+    scale: 1,
+    duration: 0.4,
+    ease: "power2.out"
+  });
+});
+startBtn.addEventListener("click", () => {
+  gsap.to(startBtn, {
+    scale: 0.9,
+    duration: 0.2,
+    ease: "power2.in"
+  });
 
-// ◀ PREV
-prevBtn.addEventListener("click", () => {
-  if (isAnimating) return;
-
-  index--;
-  if (index < 0) index = slideCount - 1;
-
-  slidePrev(index);
-  updateButtons();
+  gsap.to(".intro", {
+    opacity: 0,
+    y: -40,
+    duration: 0.8,
+    delay: 0.2,
+    ease: "power3.inOut",
+    onComplete: () => {
+      intro.style.display = "none";
+    }
+  });
 });
 
-// 🛠 FIX resize bug
-window.addEventListener("resize", () => {
-  slideTo(index);
-});
-const controls = document.querySelector(".controls");
-
-function updateButtons() {
-  if (index === 0) {
-    // First slide
-    prevBtn.classList.add("hidden-btn");
-    controls.classList.remove("dual-btn");
-    nextBtn.classList.add("center-btn");
-  } else {
-    // Other slides
-    prevBtn.classList.remove("hidden-btn");
-    controls.classList.add("dual-btn");
-    nextBtn.classList.remove("center-btn");
-  }
-}
-// Initial
-updateButtons();
-
-// NEXT
-nextBtn.addEventListener("click", () => {
-  if (isAnimating) return;
-
-  index++;
-  if (index >= slideCount) index = 0;
-
-  slideTo(index);
-  updateButtons();
-});
-
-// PREV
-prevBtn.addEventListener("click", () => {
-  if (isAnimating) return;
-
-  index--;
-  if (index < 0) index = slideCount - 1;
-
-  slideTo(index);
-  updateButtons();
-});
