@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🔒 NO SCROLL */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 32px 26px 36px;
+  border-radius: 28px;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 🔒 HEADING SAFE ZONE */
+.card h1 {
+  color: #b30059;
+  margin-bottom: 10px;
+  font-size: 1.6rem;
+  z-index: 3;
+  position: relative;
+}
+
+.card p {
+  margin-bottom: 18px;
+  z-index: 3;
+  position: relative;
+}
+
+/* IMAGE */
+.card img {
+  width: 100%;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+/* NORMAL BUTTONS */
+button {
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: none;
+  background: #ff4081;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* ========================= */
+/* ❤️ RESPONSIVE HEART */
+/* ========================= */
+
+:root {
+  --heart-size: 120px;
+}
+
+/* DESKTOP */
+@media (min-width: 768px) {
+  :root { --heart-size: 130px; }
+}
+
+/* LARGE DESKTOP */
+@media (min-width: 1200px) {
+  :root { --heart-size: 140px; }
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  :root { --heart-size: 100px; }
+}
+
+.heart-btn {
+  width: var(--heart-size);
+  height: calc(var(--heart-size) * 0.92);
+
+  margin: 18px auto 8px; /* 🔥 MAIN FIX */
+  background: linear-gradient(135deg, #ff4d6d, #ff0a54);
+
+  position: relative;
+  transform: rotate(-45deg);
+  border-radius: 20%;
+  cursor: pointer;
+
+  animation: realBeat 1.4s infinite;
+  box-shadow: 0 0 30px rgba(255, 64, 129, 0.6);
+  z-index: 1;
+}
+
+/* HEART SHAPE */
+.heart-btn::before,
+.heart-btn::after {
+  content: "";
+  position: absolute;
+  width: var(--heart-size);
+  height: calc(var(--heart-size) * 0.92);
+  background: linear-gradient(135deg, #ff4d6d, #ff0a54);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.heart-btn::before {
+  top: calc(var(--heart-size) * -0.46);
+  left: 0;
+}
+
+.heart-btn::after {
+  left: calc(var(--heart-size) * 0.46);
+  top: 0;
+}
+
+/* ❤️ TEXT INSIDE HEART */
+.heart-btn span {
+  position: absolute;
+  inset: 0;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  color: white;
+  font-weight: 700;
+  font-size: clamp(13px, 3vw, 15px);
+  line-height: 1.2;
+
+  z-index: 2;
+  pointer-events: none;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* 💓 HEARTBEAT */
+@keyframes realBeat {
+  0%   { transform: rotate(-45deg) scale(1); }
+  15%  { transform: rotate(-45deg) scale(1.15); }
+  30%  { transform: rotate(-45deg) scale(1); }
+  45%  { transform: rotate(-45deg) scale(1.08); }
+  60%  { transform: rotate(-45deg) scale(1); }
+  100% { transform: rotate(-45deg) scale(1); }
+}
+
+/* 🌸 FLOATING EMOJIS */
+.emoji-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.emoji {
+  position: absolute;
+  bottom: -40px;
+}
+/* (previous CSS SAME rahega) */
+
+/* ❤️ FINAL LOVE PAGE */
+.love-page h1 {
+  color: #b30059;
+  margin-bottom: 18px;
+  font-size: 1.8rem;
+}
+
+.love-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+/* soft glow */
+.love-page {
+  box-shadow:
+    0 0 25px rgba(255, 64, 129, 0.35),
+    0 20px 40px rgba(0,0,0,0.25);
+}
